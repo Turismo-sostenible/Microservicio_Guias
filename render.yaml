@@ -1,0 +1,41 @@
+# render.yaml - Le dice a Render cómo construir y desplegar tus servicios
+
+services:
+  # 1. Servicio para la base de datos PostgreSQL
+  - name: postgres-db
+    type: db # Tipo de servicio: Base de Datos
+    databaseName: guias_db_command
+    databaseUser: user
+    plan: free # Usa el plan gratuito de Render para Postgres
+
+  # 2. Servicio para tu aplicación Spring Boot
+  - name: guia-service
+    type: web # Tipo de servicio: Aplicación Web
+    plan: free # Usa el plan gratuito de Render para la aplicación
+    buildFilter:
+      paths:
+      - "src/**"
+      - "pom.xml"
+      - "Dockerfile"
+    dockerfilePath: ./Dockerfile # Le dice a Render dónde está tu Dockerfile
+    envVars:
+      # Render inyecta automáticamente la URL de conexión a su propia base de datos Postgres
+      - key: SPRING_DATASOURCE_URL
+        fromService:
+          type: db
+          name: postgres-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromService:
+          type: db
+          name: postgres-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromService:
+          type: db
+          name: postgres-db
+          property: password
+      
+      # Aquí debes poner tu cadena de conexión de MongoDB Atlas
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false # sync: false para que lo gestiones como un secreto

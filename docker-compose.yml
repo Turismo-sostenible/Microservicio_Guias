@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # 1. Servicio de nuestra aplicación Spring Boot
+  guia-service:
+    build: . # Construye la imagen usando el Dockerfile en el directorio actual
+    container_name: guia-service-app
+    ports:
+      - "8080:8080" # Mapea el puerto 8080 del host al 8080 del contenedor
+    depends_on:
+      - postgres-db # Le dice a Docker que inicie este servicio después de que la BD de Postgres esté lista
+      - mongo-db    # Y después de que la BD de Mongo esté lista
+    networks:
+      - guias-net
+
+  # 2. Servicio de la base de datos PostgreSQL
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=guias_db_command
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432" # Expone el puerto de Postgres al host para poder conectarte con un cliente si lo necesitas
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persiste los datos de Postgres
+    networks:
+      - guias-net
+
+  # 3. Servicio de la base de datos MongoDB
+  mongo-db:
+    image: mongo:6.0
+    container_name: mongo-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27017:27017" # Expone el puerto de Mongo
+    volumes:
+      - mongo_data:/data/db # Persiste los datos de Mongo
+    networks:
+      - guias-net
+
+# Define el volumen para la persistencia de datos
+volumes:
+  postgres_data:
+  mongo_data:
+
+# Define la red para la comunicación entre contenedores
+networks:
+  guias-net:
+    driver: bridge
