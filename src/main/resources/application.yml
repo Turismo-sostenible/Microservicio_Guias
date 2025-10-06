@@ -4,13 +4,13 @@ server:
 spring:
   # --- Configuración para PostgreSQL (Comandos / JPA) ---
   datasource:
-    url: jdbc:postgresql://postgres-db:5432/guias_db_command
-    username: user
-    password: password
+    url: jdbc:${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update # En desarrollo, crea/actualiza el esquema automáticamente. Cambiar a 'validate' o 'none' en producción.
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -19,4 +19,5 @@ spring:
   # --- Configuración para MongoDB (Consultas) ---
   data:
     mongodb:
-      uri: mongodb://user:password@mongo-db:27017/guias_db_query?authSource=admin
+      # Esta línea también cambia para usar la variable de entorno directamente
+      uri: ${SPRING_DATA_MONGODB_URI}
