@@ -1,4 +1,4 @@
-# render.yaml - Versión corregida
+# render.yaml - Versión final
 
 # Define los servicios de la aplicación (como tu API)
 services:
@@ -6,6 +6,7 @@ services:
   - name: guia-service
     type: web
     plan: free
+    runtime: docker # <-- ¡ESTA ES LA LÍNEA QUE FALTABA!
     buildFilter:
       paths:
       - "src/**"
