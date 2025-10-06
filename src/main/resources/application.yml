@@ -2,20 +2,22 @@ server:
   port: 8080
 
 spring:
+  # --- Configuración para PostgreSQL (Comandos / JPA) ---
+  datasource:
+    # ESTA ES LA SOLUCIÓN: Construimos manualmente la URL en el formato correcto
+    # usando la variable de entorno que nos da Render.
+    url: jdbc:${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      # Esta opción crea o actualiza las tablas al arrancar. Ideal para desarrollo.
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
-        format_sql: true
-        # LA LÍNEA MÁS IMPORTANTE DE LA SOLUCIÓN:
-        # Le decimos explícitamente a Hibernate que estamos usando el dialecto de PostgreSQL.
-        # Esto evita que necesite conectarse para adivinarlo.
+        # Mantenemos el dialecto explícito como buena práctica y seguro adicional.
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  
-  # La configuración de MongoDB se queda igual. Spring tomará la variable de entorno.
+
+  # --- Configuración para MongoDB (Consultas) ---
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
