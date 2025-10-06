@@ -1,41 +1,40 @@
-# render.yaml - Le dice a Render cómo construir y desplegar tus servicios
+# render.yaml - Versión corregida
 
+# Define los servicios de la aplicación (como tu API)
 services:
-  # 1. Servicio para la base de datos PostgreSQL
-  - name: postgres-db
-    type: db # Tipo de servicio: Base de Datos
-    databaseName: guias_db_command
-    databaseUser: user
-    plan: free # Usa el plan gratuito de Render para Postgres
-
-  # 2. Servicio para tu aplicación Spring Boot
+  # 1. Servicio para tu aplicación Spring Boot
   - name: guia-service
-    type: web # Tipo de servicio: Aplicación Web
-    plan: free # Usa el plan gratuito de Render para la aplicación
+    type: web
+    plan: free
     buildFilter:
       paths:
       - "src/**"
       - "pom.xml"
       - "Dockerfile"
-    dockerfilePath: ./Dockerfile # Le dice a Render dónde está tu Dockerfile
+    dockerfilePath: ./Dockerfile
     envVars:
-      # Render inyecta automáticamente la URL de conexión a su propia base de datos Postgres
+      # Referencia a las variables de la base de datos definida abajo
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          type: db
-          name: postgres-db
+        fromDatabase:
+          name: postgres-db # El nombre que le dimos a la base de datos
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        fromService:
-          type: db
+        fromDatabase:
           name: postgres-db
           property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          type: db
+        fromDatabase:
           name: postgres-db
           property: password
       
-      # Aquí debes poner tu cadena de conexión de MongoDB Atlas
+      # Variable secreta para MongoDB Atlas (esta no cambia)
       - key: SPRING_DATA_MONGODB_URI
-        sync: false # sync: false para que lo gestiones como un secreto
+        sync: false
+
+# Define las bases de datos
+databases:
+  # 2. Servicio para la base de datos PostgreSQL
+  - name: postgres-db
+    databaseName: guias_db_command
+    user: user
+    plan: free
