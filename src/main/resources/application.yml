@@ -15,9 +15,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  data:
-    mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI}
+
 
 ---
 # ===================================================================
@@ -27,12 +25,25 @@ spring:
   config:
     activate:
       on-profile: "docker"
+  
+  # --- CONFIGURACIÓN DE POSTGRESQL PARA DOCKER ---
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/guias_db_command
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  # --- CONFIGURACIÓN DE MONGODB PARA DOCKER ---
+  data:
+    mongodb:
+      uri: mongodb://user:password@mongo-db:27017/guias_db_query?authSource=admin
+
+  # --- CONFIGURACIÓN DE RABBITMQ PARA DOCKER ---
   rabbitmq:
     host: rabbitmq-broker
     port: 5672
     username: user
     password: password
-
 ---
 # ===================================================================
 # PERFIL DE PRODUCCIÓN (Para Render)
@@ -41,6 +52,9 @@ spring:
   config:
     activate:
       on-profile: "prod"
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
   # ¡IMPORTANTE! No definimos NADA de rabbitmq aquí.
   # Esto fuerza a Spring Boot a buscar la variable de entorno
   # SPRING_RABBITMQ_ADDRESSES que configuramos en Render.
