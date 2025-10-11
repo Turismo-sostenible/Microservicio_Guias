@@ -9,7 +9,8 @@ services:
       - "8080:8080" # Mapea el puerto 8080 del host al 8080 del contenedor
     depends_on:
       - postgres-db # Le dice a Docker que inicie este servicio después de que la BD de Postgres esté lista
-      - mongo-db    # Y después de que la BD de Mongo esté lista
+      - mongo-db  
+      - rabbitmq-broker  # Y después de que la BD de Mongo esté lista
     networks:
       - guias-net
 
@@ -39,6 +40,18 @@ services:
       - "27017:27017" # Expone el puerto de Mongo
     volumes:
       - mongo_data:/data/db # Persiste los datos de Mongo
+    networks:
+      - guias-net
+ # 4. NUEVO SERVICIO: RabbitMQ Broker
+  rabbitmq-broker:
+    image: rabbitmq:3.11-management # Usamos la imagen con la UI de gestión
+    container_name: rabbitmq-broker
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - "5672:5672"   # Puerto del broker para la aplicación
+      - "15672:15672" # Puerto para la interfaz web de gestión
     networks:
       - guias-net
 

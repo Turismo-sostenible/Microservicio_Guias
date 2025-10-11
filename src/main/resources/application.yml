@@ -2,11 +2,8 @@ server:
   port: 8080
 
 spring:
-  # --- Configuración para PostgreSQL (Comandos / JPA) ---
   datasource:
-    # ESTA ES LA SOLUCIÓN: Construimos manualmente la URL en el formato correcto
-    # usando la variable de entorno que nos da Render.
-    url: jdbc:${SPRING_DATASOURCE_URL}
+    url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
@@ -14,10 +11,13 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        # Mantenemos el dialecto explícito como buena práctica y seguro adicional.
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
-  # --- Configuración para MongoDB (Consultas) ---
+  # --- NUEVA CONFIGURACIÓN para RabbitMQ ---
+  rabbitmq:
+    host: rabbitmq-broker # El nombre del servicio en docker-compose.yml
+    port: 5672
+    username: user
+    password: password
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
