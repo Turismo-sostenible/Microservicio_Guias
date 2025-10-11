@@ -7,6 +7,8 @@ services:
     container_name: guia-service-app
     ports:
       - "8080:8080" # Mapea el puerto 8080 del host al 8080 del contenedor
+    environment: 
+      - SPRING_PROFILES_ACTIVE=docker 
     depends_on:
       - postgres-db # Le dice a Docker que inicie este servicio después de que la BD de Postgres esté lista
       - mongo-db  

@@ -1,23 +1,46 @@
+# src/main/resources/application.yml
+
+# ===================================================================
+# CONFIGURACIÓN BASE (Común para todos los perfiles)
+# ===================================================================
 server:
   port: 8080
 
 spring:
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+  main:
+    banner-mode: "off" # Opcional: para limpiar un poco los logs
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  # --- NUEVA CONFIGURACIÓN para RabbitMQ ---
-  rabbitmq:
-    host: rabbitmq-broker # El nombre del servicio en docker-compose.yml
-    port: 5672
-    username: user
-    password: password
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
+
+---
+# ===================================================================
+# PERFIL DE DOCKER (Para desarrollo local)
+# ===================================================================
+spring:
+  config:
+    activate:
+      on-profile: "docker"
+  rabbitmq:
+    host: rabbitmq-broker
+    port: 5672
+    username: user
+    password: password
+
+---
+# ===================================================================
+# PERFIL DE PRODUCCIÓN (Para Render)
+# ===================================================================
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+  # ¡IMPORTANTE! No definimos NADA de rabbitmq aquí.
+  # Esto fuerza a Spring Boot a buscar la variable de entorno
+  # SPRING_RABBITMQ_ADDRESSES que configuramos en Render.
