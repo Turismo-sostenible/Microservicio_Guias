@@ -23,9 +23,13 @@ public class CreateGuiaUseCaseImpl implements CreateGuiaUseCase {
         // 2. Persistir el nuevo agregado usando el repositorio de comandos
         Guia guiaGuardado = guiaCommandRepository.save(nuevoGuia);
 
-        // 3. Publicar un evento de dominio para notificar a otros componentes
-        eventPublisher.publish(new GuiaCreadoEvent(guiaGuardado.getId(), guiaGuardado.getNombre()));
-        
+        eventPublisher.publish(new GuiaCreadoEvent(
+        new GuiaCreadoEvent.GuiaId(guiaGuardado.getId().value()),
+        guiaGuardado.getNombre(),
+        guiaGuardado.getEmail(),
+        guiaGuardado.getTelefono(),
+        guiaGuardado.getEstado().name() 
+        ));
         return guiaGuardado;
     }
 }

@@ -1,7 +1,6 @@
-# Este workflow se llama "Java CI with Maven"
+
 name: Java CI with Maven
 
-# Define cuándo se debe ejecutar este workflow
 on:
   # Se ejecuta cuando se hace un push a la rama 'main'
   push:
