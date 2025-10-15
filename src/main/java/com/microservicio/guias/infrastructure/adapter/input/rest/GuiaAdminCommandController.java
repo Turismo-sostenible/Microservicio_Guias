@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1/guias/admin")
+@RequestMapping("/admin")
 public class GuiaAdminCommandController {
 
     private final CreateGuiaUseCase createGuiaUseCase;
