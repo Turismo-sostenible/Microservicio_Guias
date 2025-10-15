@@ -1,10 +1,13 @@
 package com.microservicio.guias.application.usecase;
+
+
 import com.microservicio.guias.application.port.input.SynchronizeGuiaReadModelUseCase;
 import com.microservicio.guias.application.port.output.GuiaCommandRepository;
 import com.microservicio.guias.application.port.output.GuiaQueryRepository;
 import com.microservicio.guias.domain.event.GuiaActualizadoEvent;
 import com.microservicio.guias.domain.event.GuiaCreadoEvent;
 import com.microservicio.guias.domain.event.GuiaEliminadoEvent;
+import com.microservicio.guias.domain.model.GuiaId;
 
 public class SynchronizeGuiaReadModelUseCaseImpl implements SynchronizeGuiaReadModelUseCase {
     
@@ -18,18 +21,19 @@ public class SynchronizeGuiaReadModelUseCaseImpl implements SynchronizeGuiaReadM
 
     @Override
     public void handleGuiaCreado(GuiaCreadoEvent event) {
-        // Busca la fuente de la verdad (BD de comandos) para obtener el estado completo
-        commandRepository.findById(event.guiaId()).ifPresent(queryRepository::save);
+        GuiaId idOficial = new GuiaId(event.guiaId().value());
+        commandRepository.findById(idOficial).ifPresent(queryRepository::save);
     }
 
     @Override
     public void handleGuiaActualizado(GuiaActualizadoEvent event) {
-        // Busca la fuente de la verdad para obtener los datos más recientes
-        commandRepository.findById(event.guiaId()).ifPresent(queryRepository::save);
+        GuiaId idOficial = new GuiaId(event.guiaId().value());
+        commandRepository.findById(idOficial).ifPresent(queryRepository::save);
     }
 
     @Override
     public void handleGuiaEliminado(GuiaEliminadoEvent event) {
-        queryRepository.deleteById(event.guiaId());
+        GuiaId idOficial = new GuiaId(event.guiaId().value());
+        queryRepository.deleteById(idOficial);
     }
 }
