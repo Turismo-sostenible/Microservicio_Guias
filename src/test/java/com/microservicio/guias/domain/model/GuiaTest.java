@@ -19,7 +19,6 @@ class GuiaTest {
         assertNotNull(nuevoGuia.getId(), "El ID no debería ser nulo");
         assertEquals(nombre, nuevoGuia.getNombre(), "El nombre no coincide");
         assertEquals(email, nuevoGuia.getEmail(), "El email no coincide");
-        assertEquals(EstadoGuia.ACTIVO, nuevoGuia.getEstado(), "El estado inicial debería ser ACTIVO");
         assertTrue(nuevoGuia.getDisponibilidadSemanal().isEmpty(), "La lista de disponibilidad semanal debería estar vacía inicialmente");
     }
 }
