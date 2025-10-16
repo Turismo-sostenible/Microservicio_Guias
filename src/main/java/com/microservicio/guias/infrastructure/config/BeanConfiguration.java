@@ -42,4 +42,8 @@ public class BeanConfiguration {
     public SynchronizeGuiaReadModelUseCase synchronizeGuiaReadModelUseCase(GuiaCommandRepository commandRepo, GuiaQueryRepository queryRepo) {
         return new SynchronizeGuiaReadModelUseCaseImpl(commandRepo, queryRepo);
     }
+    @Bean
+    public AddHorarioUseCase addHorarioUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
+        return new AddHorarioUseCaseImpl(commandRepository, eventPublisher);
+    }
 }

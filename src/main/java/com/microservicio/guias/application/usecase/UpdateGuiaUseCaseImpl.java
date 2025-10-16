@@ -32,7 +32,7 @@ public class UpdateGuiaUseCaseImpl implements UpdateGuiaUseCase {
         guiaCommandRepository.save(guia);
 
         // 3. Publicar el evento
-        eventPublisher.publish(new GuiaActualizadoEvent(guia.getId(), guia.getNombre(), guia.getEmail(), guia.getTelefono(), guia.getEstado().name()));
+        eventPublisher.publish(new GuiaActualizadoEvent(guia.getId(), guia.getNombre(), guia.getEmail(), guia.getTelefono(), guia.getEstado().name(), guia.getHorarios()));
         
         return true;
     }

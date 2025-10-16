@@ -1,7 +1,9 @@
 package com.microservicio.guias.infrastructure.adapter.input.rest;
+import com.microservicio.guias.application.port.input.AddHorarioUseCase;
 import com.microservicio.guias.application.port.input.CreateGuiaUseCase;
 import com.microservicio.guias.application.port.input.DeleteGuiaUseCase;
 import com.microservicio.guias.application.port.input.UpdateGuiaUseCase;
+import com.microservicio.guias.infrastructure.adapter.input.rest.dto.AddHorarioRequest;
 import com.microservicio.guias.infrastructure.adapter.input.rest.dto.CreateGuiaRequest;
 import com.microservicio.guias.infrastructure.adapter.input.rest.dto.UpdateGuiaRequest;
 import com.microservicio.guias.infrastructure.adapter.input.rest.mapper.GuiaApiMapper;
@@ -20,12 +22,15 @@ public class GuiaAdminCommandController {
     private final CreateGuiaUseCase createGuiaUseCase;
     private final UpdateGuiaUseCase updateGuiaUseCase;
     private final DeleteGuiaUseCase deleteGuiaUseCase;
+    private final AddHorarioUseCase addHorarioUseCase;
+
     private final GuiaApiMapper mapper;
 
-    public GuiaAdminCommandController(CreateGuiaUseCase c, UpdateGuiaUseCase u, DeleteGuiaUseCase d, GuiaApiMapper m) {
+    public GuiaAdminCommandController(CreateGuiaUseCase c, UpdateGuiaUseCase u, DeleteGuiaUseCase d, AddHorarioUseCase a, GuiaApiMapper m) {
         this.createGuiaUseCase = c;
         this.updateGuiaUseCase = u;
         this.deleteGuiaUseCase = d;
+        this.addHorarioUseCase = a;
         this.mapper = m;
     }
 
@@ -53,5 +58,20 @@ public class GuiaAdminCommandController {
     public ResponseEntity<Void> deleteGuia(@PathVariable String id) {
         deleteGuiaUseCase.deleteGuia(GuiaId.fromString(id));
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{guiaId}/horarios")
+    public ResponseEntity<Void> addHorario(
+        @PathVariable String guiaId, 
+        @RequestBody AddHorarioRequest request
+    ) {
+        var command = new AddHorarioUseCase.AddHorarioCommand(
+            GuiaId.fromString(guiaId),
+            request.fechaHoraInicio(),
+            request.fechaHoraFin()
+        );
+
+        boolean success = addHorarioUseCase.addHorario(command);
+
+        return success ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
