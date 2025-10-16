@@ -26,9 +26,8 @@ public class GuiaJpaEntity {
     @Column(nullable = false)
     private EstadoGuiaJpa estado;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "guia_franjas", joinColumns = @JoinColumn(name = "guia_id"))
-    private List<DisponibilidadDiariaEmbeddable> franjas;
+    @OneToMany(mappedBy = "guia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<DisponibilidadDiariaEntity> disponibilidadSemanal;
 
     public enum EstadoGuiaJpa {
         ACTIVO,
