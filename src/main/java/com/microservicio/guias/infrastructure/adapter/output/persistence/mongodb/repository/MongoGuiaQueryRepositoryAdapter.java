@@ -1,9 +1,9 @@
 package com.microservicio.guias.infrastructure.adapter.output.persistence.mongodb.repository;
 
 import com.microservicio.guias.application.port.output.GuiaQueryRepository;
+import com.microservicio.guias.domain.model.DisponibilidadDiaria;
 import com.microservicio.guias.domain.model.Guia;
 import com.microservicio.guias.domain.model.GuiaId;
-import com.microservicio.guias.domain.model.Horario;
 import com.microservicio.guias.infrastructure.adapter.output.persistence.mongodb.document.GuiaMongoDocument;
 import com.microservicio.guias.infrastructure.adapter.output.persistence.mongodb.mapper.GuiaMongoMapper;
 import org.springframework.stereotype.Repository;
@@ -50,9 +50,9 @@ public class MongoGuiaQueryRepositoryAdapter implements GuiaQueryRepository {
     }
 
     @Override
-    public List<Horario> findHorariosByGuiaId(GuiaId id) {
+    public List<DisponibilidadDiaria> findHorariosByGuiaId(GuiaId id) {
         return findById(id)
-                .map(Guia::getHorarios)
+                .map(Guia::getDisponibilidadSemanal)
                 .orElse(Collections.emptyList());
     }
 }

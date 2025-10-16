@@ -1,7 +1,7 @@
 package com.microservicio.guias.application.port.output;
+import com.microservicio.guias.domain.model.DisponibilidadDiaria;
 import com.microservicio.guias.domain.model.Guia;
 import com.microservicio.guias.domain.model.GuiaId;
-import com.microservicio.guias.domain.model.Horario;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,5 +17,5 @@ public interface GuiaQueryRepository {
     // Para las consultas de la API
     Optional<Guia> findById(GuiaId id);
     List<Guia> findAll();
-    List<Horario> findHorariosByGuiaId(GuiaId id);
+    List<DisponibilidadDiaria> findHorariosByGuiaId(GuiaId id);
 }

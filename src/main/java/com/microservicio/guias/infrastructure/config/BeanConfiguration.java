@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     // Command Use Cases
-    @Bean
+   @Bean
     public CreateGuiaUseCase createGuiaUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
         return new CreateGuiaUseCaseImpl(commandRepository, eventPublisher);
     }
-
+    
     @Bean
     public UpdateGuiaUseCase updateGuiaUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
         return new UpdateGuiaUseCaseImpl(commandRepository, eventPublisher);
@@ -25,8 +25,7 @@ public class BeanConfiguration {
     public DeleteGuiaUseCase deleteGuiaUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
         return new DeleteGuiaUseCaseImpl(commandRepository, eventPublisher);
     }
-
-    // Query Use Cases
+    
     @Bean
     public FindGuiaQuery findGuiaQuery(GuiaQueryRepository queryRepository) {
         return new FindGuiaQueryImpl(queryRepository);
@@ -37,13 +36,16 @@ public class BeanConfiguration {
         return new FindHorariosDeGuiaQueryImpl(queryRepository);
     }
 
-    // Synchronization Use Case
     @Bean
     public SynchronizeGuiaReadModelUseCase synchronizeGuiaReadModelUseCase(GuiaCommandRepository commandRepo, GuiaQueryRepository queryRepo) {
         return new SynchronizeGuiaReadModelUseCaseImpl(commandRepo, queryRepo);
     }
+
+    /**
+     * NUEVO BEAN para el caso de uso de actualizar disponibilidad.
+     */
     @Bean
-    public AddHorarioUseCase addHorarioUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
-        return new AddHorarioUseCaseImpl(commandRepository, eventPublisher);
+    public UpdateDisponibilityUseCase actualizarDisponibilidadUseCase(GuiaCommandRepository commandRepository, EventPublisher eventPublisher) {
+        return new UpdateDisponibilityUseCaseImpl(commandRepository, eventPublisher);
     }
 }

@@ -14,5 +14,5 @@ public class GuiaMongoDocument {
     private String email;
     private String telefono;
     private String estado;
-    private List<HorarioDocument> horarios;
+    private List<DisponibilidadDiariaDocument> horarios;
 }

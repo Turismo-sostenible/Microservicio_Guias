@@ -1,37 +1,32 @@
 package com.microservicio.guias.application.usecase;
-import com.microservicio.guias.application.port.input.UpdateGuiaUseCase;
+import com.microservicio.guias.application.port.input.UpdateDisponibilityUseCase;
 import com.microservicio.guias.application.port.output.EventPublisher;
 import com.microservicio.guias.application.port.output.GuiaCommandRepository;
 import com.microservicio.guias.domain.event.GuiaActualizadoEvent;
 import com.microservicio.guias.domain.model.Guia;
-
 import java.util.Optional;
 
-public class UpdateGuiaUseCaseImpl implements UpdateGuiaUseCase {
+public class UpdateDisponibilityUseCaseImpl implements UpdateDisponibilityUseCase {
 
     private final GuiaCommandRepository guiaCommandRepository;
     private final EventPublisher eventPublisher;
 
-    public UpdateGuiaUseCaseImpl(GuiaCommandRepository guiaCommandRepository, EventPublisher eventPublisher) {
-        this.guiaCommandRepository = guiaCommandRepository;
-        this.eventPublisher = eventPublisher;
+    public UpdateDisponibilityUseCaseImpl(GuiaCommandRepository repo, EventPublisher publisher) {
+        this.guiaCommandRepository = repo;
+        this.eventPublisher = publisher;
     }
 
     @Override
-    public boolean updateGuia(UpdateGuiaCommand command) {
-        Optional<Guia> guiaOptional = guiaCommandRepository.findById(command.id());
+    public boolean actualizarDisponibilidad(UpdateDisponibilityCommand command) {
+        Optional<Guia> guiaOptional = guiaCommandRepository.findById(command.guiaId());
+
         if (guiaOptional.isEmpty()) {
             return false;
         }
 
         Guia guia = guiaOptional.get();
-        // 1. Usar métodos del dominio para modificar el estado
-        guia.actualizarDatos(command.nombre(), command.email(), command.telefono());
-
-        // 2. Persistir los cambios
+        guia.actualizarDisponibilidad(command.nuevaDisponibilidad()); // Usamos el nuevo método del dominio
         guiaCommandRepository.save(guia);
-
-        // 3. Publicar el evento
         eventPublisher.publish(new GuiaActualizadoEvent(guia.getId(), guia.getNombre(), guia.getEmail(), guia.getTelefono(), guia.getEstado().name(), guia.getDisponibilidadSemanal()));
         
         return true;

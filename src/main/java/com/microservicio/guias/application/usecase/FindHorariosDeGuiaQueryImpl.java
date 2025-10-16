@@ -1,8 +1,8 @@
 package com.microservicio.guias.application.usecase;
 import com.microservicio.guias.application.port.input.FindHorariosDeGuiaQuery;
 import com.microservicio.guias.application.port.output.GuiaQueryRepository;
+import com.microservicio.guias.domain.model.DisponibilidadDiaria;
 import com.microservicio.guias.domain.model.GuiaId;
-import com.microservicio.guias.domain.model.Horario;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class FindHorariosDeGuiaQueryImpl implements FindHorariosDeGuiaQuery {
     }
 
     @Override
-    public List<Horario> findHorariosByGuiaId(GuiaId id) {
+    public List<DisponibilidadDiaria> findHorariosByGuiaId(GuiaId id) {
         return guiaQueryRepository.findHorariosByGuiaId(id);
     }
 }

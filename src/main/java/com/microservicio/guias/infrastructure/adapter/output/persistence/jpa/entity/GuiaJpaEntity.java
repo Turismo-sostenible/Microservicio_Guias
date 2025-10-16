@@ -27,8 +27,8 @@ public class GuiaJpaEntity {
     private EstadoGuiaJpa estado;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "guia_horarios", joinColumns = @JoinColumn(name = "guia_id"))
-    private List<HorarioEmbeddable> horarios;
+    @CollectionTable(name = "guia_franjas", joinColumns = @JoinColumn(name = "guia_id"))
+    private List<DisponibilidadDiariaEmbeddable> franjas;
 
     public enum EstadoGuiaJpa {
         ACTIVO,
