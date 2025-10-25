@@ -1,0 +1,35 @@
+# Este archivo SE USARÁ por defecto en TODOS los tests
+# (BaseIntegrationTest, MongoGuiaQueryRepositoryAdapterIT, etc.)
+# Aquí le decimos que NO active Testcontainers automáticamente.
+spring:
+  testcontainers:
+    disabled: true
+
+# Configuración base para los tests de CI (que se sobreescribirá)
+# Usamos el perfil "docker" como base, pero apuntamos a 'localhost'
+# ya que en GitHub Actions, los servicios corren en 'localhost' 
+# (o con el nombre del servicio, lo manejaremos con variables de entorno)
+---
+spring:
+  config:
+    activate:
+      on-profile: "ci" # Un nuevo perfil para Continuous Integration
+  
+  # --- CONFIGURACIÓN DE POSTGRESQL PARA CI ---
+  datasource:
+    url: jdbc:postgresql://${PGHOST:postgres}:${PGPORT:5432}/guias_db_command
+    username: ${PGUSER:user}
+    password: ${PGPASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  # --- CONFIGURACIÓN DE MONGODB PARA CI ---
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USER:user}:${MONGO_PASSWORD:password}@${MONGO_HOST:mongo}:${MONGO_PORT:27017}/guias_db_query?authSource=admin
+
+  # --- CONFIGURACIÓN DE RABBITMQ PARA CI ---
+  rabbitmq:
+    host: ${RABBIT_HOST:rabbitmq}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:user}
+    password: ${RABBIT_PASSWORD:password}
