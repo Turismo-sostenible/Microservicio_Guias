@@ -23,18 +23,20 @@ import java.util.concurrent.TimeUnit;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = "spring.cloud.bootstrap.enabled=false"
+)
 class CqrsFullFlowE2ETest extends BaseIntegrationTest {
 
     @Autowired
-    private TestRestTemplate restTemplate; 
+    private TestRestTemplate restTemplate;
 
     @Autowired
-    private SpringDataGuiaJpaRepository commandRepository; 
+    private SpringDataGuiaJpaRepository commandRepository;
 
     @Autowired
-    private SpringDataGuiaMongoRepository queryRepository; 
+    private SpringDataGuiaMongoRepository queryRepository;
 
     @AfterEach
     void limpiar() {
@@ -67,7 +69,6 @@ class CqrsFullFlowE2ETest extends BaseIntegrationTest {
         assertTrue(jpaEntity.isPresent(), "El guía no se guardó en Postgres");
         assertEquals("Guia E2E", jpaEntity.get().getNombre());
 
-        
         await().atMost(5, TimeUnit.SECONDS)
                .pollInterval(100, TimeUnit.MILLISECONDS)
                .untilAsserted(() -> {

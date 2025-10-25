@@ -2,7 +2,6 @@ package com.microservicio.guias;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-// ¡Importa esto!
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
@@ -13,7 +12,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 @ActiveProfiles("test") 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE) 
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
+    properties = "spring.cloud.bootstrap.enabled=false" 
+) 
 public abstract class BaseIntegrationTest {
 
     @Container
