@@ -1,0 +1,10 @@
+version: 1.0 
+runtime: java17
+
+build:
+  commands:
+    - mvn clean install -DskipTests
+    
+run:
+  command: java -jar target/MicroservicioGuias-0.0.1-SNAPSHOT.jar
+  port: 8080

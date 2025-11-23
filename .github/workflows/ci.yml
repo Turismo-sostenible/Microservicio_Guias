@@ -61,8 +61,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and test with Maven
-        # --- MODIFICADO: Añadimos las variables de entorno ---
-        # Estas variables las usará el application-test.yml (perfil "ci")
         env:
           PGHOST: postgres
           PGPORT: 5432
