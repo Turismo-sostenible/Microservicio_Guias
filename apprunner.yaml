@@ -1,11 +1,12 @@
-
 version: 1.0 
-runtime: corretto17 
+runtime: corretto17
 
 build:
   commands:
-    - mvn clean install -DskipTests
-    
+    build:
+      - mvn clean install -DskipTests
+      
 run:
   command: java -jar target/MicroservicioGuias-0.0.1-SNAPSHOT.jar
-  port: 8080
+  network:
+    port: 8080
