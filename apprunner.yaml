@@ -1,5 +1,6 @@
+
 version: 1.0 
-runtime: java17
+runtime: corretto17 
 
 build:
   commands:
